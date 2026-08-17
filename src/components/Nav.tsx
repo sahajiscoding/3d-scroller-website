@@ -9,7 +9,7 @@ const LINKS = [
   { href: "#contact", label: "Contact" },
 ];
 
-export default function Nav() {
+export default function Nav({ hidden = false }: { hidden?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,9 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        hidden ? "pointer-events-none -translate-y-4 opacity-0" : "translate-y-0 opacity-100"
+      } ${
         scrolled
           ? "border-b border-line bg-ink/70 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent"
@@ -35,7 +37,7 @@ export default function Nav() {
           href="#"
           className="cursor-pointer font-display text-lg font-bold tracking-tight text-bone"
         >
-          TYPEDRIFT<span className="text-volt">®</span>
+          GOTHAM TYPE<span className="text-blood">®</span>
         </a>
 
         <ul className="hidden items-center gap-1 md:flex">
@@ -52,7 +54,7 @@ export default function Nav() {
         </ul>
 
         <Button href="#contact" size="sm">
-          Start a project
+          Light the signal
           <ArrowUpRight className="size-4" />
         </Button>
       </nav>

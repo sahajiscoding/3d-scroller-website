@@ -18,11 +18,13 @@ function SplitLine({
   className = "",
   delay = 0,
   reduce,
+  show,
 }: {
   text: string;
   className?: string;
   delay?: number;
   reduce: boolean;
+  show: boolean;
 }) {
   return (
     <span className={`block overflow-hidden pb-[0.06em] ${className}`} aria-hidden="true">
@@ -31,8 +33,8 @@ function SplitLine({
           key={i}
           className="inline-block"
           initial={reduce ? false : { y: "118%", rotate: 7 }}
-          animate={{ y: "0%", rotate: 0 }}
-          transition={{ delay: delay + i * 0.035, duration: 0.9, ease: EASE }}
+          animate={show ? { y: "0%", rotate: 0 } : { y: "118%", rotate: 7 }}
+          transition={{ delay: show ? delay + i * 0.035 : 0, duration: 0.9, ease: EASE }}
         >
           {ch === " " ? "\u00A0" : ch}
         </motion.span>
@@ -46,19 +48,21 @@ function SlideIn({
   delay = 0,
   className = "",
   reduce,
+  show,
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
   reduce: boolean;
+  show: boolean;
 }) {
   return (
     <span className={`block overflow-hidden pb-[0.08em] ${className}`} aria-hidden="true">
       <motion.span
         className="block"
         initial={reduce ? false : { y: "118%" }}
-        animate={{ y: "0%" }}
-        transition={{ delay, duration: 1, ease: EASE }}
+        animate={show ? { y: "0%" } : { y: "118%" }}
+        transition={{ delay: show ? delay : 0, duration: 1, ease: EASE }}
       >
         {children}
       </motion.span>
@@ -66,9 +70,19 @@ function SlideIn({
   );
 }
 
-export default function Hero() {
+export default function Hero({
+  introDone,
+  onSceneReady,
+  onSceneFailed,
+}: {
+  introDone: boolean;
+  onSceneReady: () => void;
+  onSceneFailed: () => void;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion() === true;
+  // under reduced motion the content shows immediately, no gate
+  const show = introDone || reduce;
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -99,8 +113,8 @@ export default function Hero() {
       className="relative flex min-h-screen flex-col overflow-hidden"
       aria-label="Hero — Type that moves in 3D"
     >
-      {/* 3D scene */}
-      <SplineScene />
+      {/* 3D scene — plays unobstructed during the intro */}
+      <SplineScene onReady={onSceneReady} onFailed={onSceneFailed} />
 
       {/* legibility washes */}
       <div
@@ -112,16 +126,36 @@ export default function Hero() {
         aria-hidden="true"
       />
 
+      {/* bat-signal beam */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] flex justify-center"
+        aria-hidden="true"
+      >
+        <div
+          className="h-[72vh] w-[46vw] min-w-[420px] max-w-[760px] opacity-[0.16]"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(255,37,71,0.9) 0%, rgba(255,37,71,0.16) 55%, transparent 100%)",
+            clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
+            filter: "blur(16px)",
+          }}
+        />
+      </div>
+      <div
+        className="pointer-events-none absolute left-1/2 top-[57%] z-[1] h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,37,71,0.22)_0%,rgba(255,37,71,0.06)_45%,transparent_70%)] blur-md"
+        aria-hidden="true"
+      />
+
       {/* center content */}
       <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-6 pb-28 pt-32 md:px-10">
         <motion.p
           initial={reduce ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.7, ease: EASE }}
+          animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+          transition={{ delay: show ? 0.2 : 0, duration: 0.7, ease: EASE }}
           className="mb-7 flex items-center gap-3 font-mono text-[11px] tracking-[0.32em] text-fog md:text-xs"
         >
-          <span className="inline-block size-1.5 rounded-full bg-aqua shadow-[0_0_12px_rgba(70,227,255,0.9)]" />
-          TYPEDRIFT® — 3D TYPE STUDIO
+          <span className="inline-block size-1.5 rounded-full bg-blood shadow-[0_0_12px_rgba(255,37,71,0.9)]" />
+          GOTHAM TYPE® — 3D TYPE STUDIO
         </motion.p>
 
         <motion.h1
@@ -138,30 +172,32 @@ export default function Hero() {
           className="pointer-events-auto max-w-6xl font-display text-[clamp(3rem,11vw,10.5rem)] font-extrabold leading-[0.94] tracking-[-0.03em] text-bone"
           aria-label="TYPE THAT MOVES IN 3D"
         >
-          <SplitLine text="TYPE THAT" delay={0.45} reduce={reduce} />
-          <SlideIn delay={0.75} reduce={reduce}>
+          <SplitLine text="TYPE THAT" delay={0.45} reduce={reduce} show={show} />
+          <SlideIn delay={0.75} reduce={reduce} show={show}>
             <span className="text-gradient">MOVES IN 3D</span>
           </SlideIn>
         </motion.h1>
 
         <motion.p
           initial={reduce ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.05, duration: 0.8, ease: EASE }}
+          animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+          transition={{ delay: show ? 1.05 : 0, duration: 0.8, ease: EASE }}
           className="mt-8 max-w-xl text-base leading-relaxed text-fog md:text-lg"
         >
-          Scroll-driven type experiences built on Spline — cinematic 3D
-          headlines, choreographed word by word, engineered to hit 60&nbsp;fps.
+          Scroll-driven 3D type experiences built on Spline — cinematic
+          headlines that own the night, engineered to hit 60&nbsp;fps.
         </motion.p>
 
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8, ease: EASE }}
-          className="pointer-events-auto mt-10 flex flex-wrap items-center gap-4"
+          animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+          transition={{ delay: show ? 1.2 : 0, duration: 0.8, ease: EASE }}
+          className={`mt-10 flex flex-wrap items-center gap-4 ${
+            show ? "pointer-events-auto" : "pointer-events-none"
+          }`}
         >
           <Button href="#studio" size="md">
-            Enter the experience
+            Light the signal
             <ArrowUpRight />
           </Button>
           <Button href="#work" variant="ghost" size="md">
@@ -174,8 +210,8 @@ export default function Hero() {
       {/* side rails */}
       <motion.p
         initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
+        animate={show ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: show ? 1.6 : 0, duration: 0.8 }}
         className="absolute left-7 top-1/2 z-10 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.4em] text-fog/70 [writing-mode:vertical-rl] xl:block"
         aria-hidden="true"
       >
@@ -183,25 +219,25 @@ export default function Hero() {
       </motion.p>
       <motion.p
         initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
+        animate={show ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: show ? 1.6 : 0, duration: 0.8 }}
         className="absolute right-7 top-1/2 z-10 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.4em] text-fog/70 [writing-mode:vertical-rl] xl:block"
         aria-hidden="true"
       >
-        EST. 2026 — LOS ANGELES
+        EST. 2026 — GOTHAM CITY
       </motion.p>
 
       {/* scroll cue */}
       <motion.div
         initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
+        animate={show ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: show ? 1.5 : 0, duration: 0.8 }}
         className="pointer-events-none absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3"
         aria-hidden="true"
       >
         <span className="font-mono text-[10px] tracking-[0.4em] text-fog">SCROLL</span>
         <span className="relative block h-12 w-px overflow-hidden bg-line">
-          <span className="animate-scroll-line absolute inset-x-0 h-full bg-gradient-to-b from-transparent via-aqua to-transparent" />
+          <span className="animate-scroll-line absolute inset-x-0 h-full bg-gradient-to-b from-transparent via-ember to-transparent" />
         </span>
       </motion.div>
     </section>

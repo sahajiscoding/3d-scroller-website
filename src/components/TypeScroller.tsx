@@ -14,11 +14,11 @@ type Tone = "solid" | "outline" | "gradient";
 type Align = "justify-start" | "justify-center" | "justify-end";
 
 const WORDS: { word: string; tone: Tone; align: Align; index: string }[] = [
-  { word: "TYPE", tone: "solid", align: "justify-start", index: "01" },
+  { word: "GOTHAM", tone: "solid", align: "justify-start", index: "01" },
   { word: "SCROLL", tone: "outline", align: "justify-end", index: "02" },
-  { word: "DRIFT", tone: "gradient", align: "justify-center", index: "03" },
-  { word: "VELOCITY", tone: "solid", align: "justify-start", index: "04" },
-  { word: "MOTION", tone: "outline", align: "justify-end", index: "05" },
+  { word: "BEYOND", tone: "gradient", align: "justify-center", index: "03" },
+  { word: "SHADOW", tone: "solid", align: "justify-start", index: "04" },
+  { word: "DARK", tone: "outline", align: "justify-end", index: "05" },
 ];
 
 const toneClass: Record<Tone, string> = {
@@ -152,18 +152,31 @@ export default function TypeScroller() {
     <section
       id="studio"
       ref={sectionRef}
-      className="relative bg-ink py-20 md:py-28"
+      className="relative bg-ink pt-20 pb-36 md:pt-28 md:pb-44"
       aria-label="The type scroller"
     >
-      {/* section header */}
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 md:flex-row md:items-end md:justify-between md:px-10">
+      {/* red ambient glow behind the cascade */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[70vh] w-[85vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(255,37,71,0.07)_0%,transparent_65%)]"
+        aria-hidden="true"
+      />
+
+      {/* the animation comes first: the word cascade */}
+      <div className="relative">
+        {WORDS.map((w) => (
+          <WordRow key={w.index} {...w} reduce={reduce} />
+        ))}
+      </div>
+
+      {/* content follows the animation */}
+      <div className="mx-auto mt-32 flex w-full max-w-[1440px] flex-col gap-6 px-6 md:mt-40 md:flex-row md:items-end md:justify-between md:px-10">
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: EASE }}
         >
-          <p className="mb-4 font-mono text-[11px] tracking-[0.35em] text-volt">
+          <p className="mb-4 font-mono text-[11px] tracking-[0.35em] text-blood">
             01 / THE SCROLLER
           </p>
           <h2 className="font-display text-4xl font-bold leading-[1.02] tracking-tight text-bone md:text-6xl">
@@ -179,16 +192,9 @@ export default function TypeScroller() {
           transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
           className="max-w-sm text-base leading-relaxed text-fog"
         >
-          Keep scrolling. Every word below tilts, scales and drifts through
-          space — choreographed to your scroll position, frame by frame.
+          Five words, choreographed to your scroll — each one tilting,
+          scaling and drifting through space, frame by frame.
         </motion.p>
-      </div>
-
-      {/* the words */}
-      <div className="relative mt-6">
-        {WORDS.map((w) => (
-          <WordRow key={w.index} {...w} reduce={reduce} />
-        ))}
       </div>
 
       {/* progress rail */}
@@ -198,7 +204,7 @@ export default function TypeScroller() {
       >
         <motion.div
           style={{ scaleY: scrollYProgress }}
-          className="h-full w-full origin-top bg-gradient-to-b from-volt to-aqua"
+          className="h-full w-full origin-top bg-gradient-to-b from-blood to-ember"
         />
       </div>
     </section>

@@ -4,7 +4,7 @@ type Variant = "primary" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "group inline-flex cursor-pointer select-none items-center justify-center gap-3 rounded-full font-semibold tracking-tight transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-aqua";
+  "group inline-flex cursor-pointer select-none items-center justify-center gap-3 rounded-full font-semibold tracking-tight transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember";
 
 const sizes: Record<Size, string> = {
   sm: "h-11 px-5 text-sm",
@@ -14,9 +14,9 @@ const sizes: Record<Size, string> = {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-r from-volt to-aqua text-ink shadow-[0_10px_44px_-10px_rgba(91,140,255,0.6)] hover:shadow-[0_14px_60px_-10px_rgba(70,227,255,0.7)] hover:brightness-110 active:scale-[0.98]",
+    "bg-gradient-to-r from-blood to-ember text-ink shadow-[0_10px_44px_-10px_rgba(255,37,71,0.6)] hover:shadow-[0_14px_60px_-10px_rgba(255,138,61,0.7)] hover:brightness-110 active:scale-[0.98]",
   ghost:
-    "border border-line bg-white/[0.03] text-bone backdrop-blur-sm hover:border-volt/70 hover:bg-volt/10 hover:text-aqua active:scale-[0.98]",
+    "border border-line bg-white/[0.03] text-bone backdrop-blur-sm hover:border-blood/70 hover:bg-blood/10 hover:text-ember active:scale-[0.98]",
 };
 
 export function Button({

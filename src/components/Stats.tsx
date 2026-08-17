@@ -38,7 +38,7 @@ function CountUp({
 }
 
 const STATS = [
-  { value: 120, suffix: "+", decimals: 0, label: "3D scenes shipped" },
+  { value: 120, suffix: "+", decimals: 0, label: "Nights lit" },
   { value: 60, suffix: "", decimals: 0, label: "FPS, real-time 3D" },
   { value: 3.4, suffix: "×", decimals: 1, label: "Avg. engagement lift" },
 ];

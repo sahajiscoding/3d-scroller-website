@@ -21,9 +21,9 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TYPEDRIFT® — 3D Type Scroller Experiences",
+  title: "GOTHAM TYPE® — 3D Type Scroller Experiences",
   description:
-    "Scroll-driven 3D type experiences built with Spline. Cinematic type that moves in three dimensions — designed to make people stop scrolling.",
+    "Scroll-driven 3D type experiences built with Spline. Cinematic headlines that own the night — engineered to make people stop scrolling.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -7,10 +7,10 @@ export default function Footer() {
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-xs">
             <p className="font-display text-xl font-bold tracking-tight text-bone">
-              TYPEDRIFT<span className="text-volt">®</span>
+              GOTHAM TYPE<span className="text-blood">®</span>
             </p>
             <p className="mt-4 text-sm leading-relaxed text-fog">
-              3D type studio. We turn headlines into experiences people feel.
+              3D type studio for the night. We turn headlines into experiences people feel.
             </p>
           </div>
 
@@ -61,10 +61,10 @@ export default function Footer() {
               <ul className="flex flex-col gap-3">
                 <li>
                   <a
-                    href="mailto:hello@typedrift.studio"
+                    href="mailto:hello@gothamtype.studio"
                     className="cursor-pointer text-sm text-fog transition-colors duration-200 hover:text-bone"
                   >
-                    hello@typedrift.studio
+                    hello@gothamtype.studio
                   </a>
                 </li>
                 <li className="text-sm text-fog">Los Angeles, CA</li>
@@ -75,11 +75,11 @@ export default function Footer() {
 
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-line pt-8 md:flex-row md:items-center">
           <p className="font-mono text-[10px] tracking-[0.25em] text-fog/60">
-            © 2026 TYPEDRIFT STUDIO — ALL RIGHTS RESERVED
+            © 2026 GOTHAM TYPE STUDIO — ALL RIGHTS RESERVED
           </p>
           <a
             href="#"
-            className="cursor-pointer font-mono text-[10px] tracking-[0.25em] text-fog transition-colors duration-200 hover:text-aqua"
+            className="cursor-pointer font-mono text-[10px] tracking-[0.25em] text-fog transition-colors duration-200 hover:text-blood"
           >
             BACK TO TOP ↑
           </a>

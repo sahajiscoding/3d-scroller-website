@@ -6,16 +6,16 @@ import { ArrowUpRight, Button } from "./Buttons";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const MARQUEE_WORDS = [
-  "TYPE",
-  "SCROLL",
-  "DRIFT",
-  "VELOCITY",
-  "MOTION",
-  "TYPE",
-  "SCROLL",
-  "DRIFT",
-  "VELOCITY",
-  "MOTION",
+  "GOTHAM",
+  "NIGHT",
+  "SHADOW",
+  "SIGNAL",
+  "DARK",
+  "GOTHAM",
+  "NIGHT",
+  "SHADOW",
+  "SIGNAL",
+  "DARK",
 ];
 
 export default function CTA() {
@@ -53,9 +53,9 @@ export default function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: EASE }}
-          className="mb-6 font-mono text-[11px] tracking-[0.35em] text-volt"
+          className="mb-6 font-mono text-[11px] tracking-[0.35em] text-blood"
         >
-          03 / LET&apos;S TALK
+          03 / LIGHT THE SIGNAL
         </motion.p>
 
         <motion.h2
@@ -65,7 +65,7 @@ export default function CTA() {
           transition={{ duration: 0.9, ease: EASE }}
           className="font-display text-[clamp(2.8rem,9vw,8.5rem)] font-extrabold leading-[0.95] tracking-[-0.03em] text-bone"
         >
-          READY TO <span className="text-gradient">DRIFT?</span>
+          THE NIGHT <span className="text-gradient">NEEDS TYPE.</span>
         </motion.h2>
 
         <motion.p
@@ -86,16 +86,12 @@ export default function CTA() {
           transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
           className="mt-12 flex flex-wrap items-center justify-center gap-4"
         >
-          <Button href="mailto:hello@typedrift.studio" size="lg">
-            Start a project
+          <Button href="mailto:hello@gothamtype.studio" size="lg">
+            Light the signal
             <ArrowUpRight className="size-5" />
           </Button>
-          <Button
-            href="mailto:hello@typedrift.studio"
-            variant="ghost"
-            size="lg"
-          >
-            hello@typedrift.studio
+          <Button href="mailto:hello@gothamtype.studio" variant="ghost" size="lg">
+            hello@gothamtype.studio
           </Button>
         </motion.div>
 
@@ -106,7 +102,7 @@ export default function CTA() {
           transition={{ duration: 0.8, delay: 0.35 }}
           className="mt-10 font-mono text-[11px] tracking-[0.25em] text-fog/70"
         >
-          AVG. 3-WEEK DELIVERY — MOTION-FIRST PRICING — WORLDWIDE
+          AVG. 3-WEEK DELIVERY — MOTION-FIRST PRICING — GOTHAM &amp; BEYOND
         </motion.p>
       </div>
     </section>

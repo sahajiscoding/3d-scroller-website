@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #050508;
-  --color-panel: #0b0b13;
-  --color-bone: #f4f6fb;
-  --color-fog: #9aa1b8;
-  --color-volt: #5b8cff;
-  --color-aqua: #46e3ff;
-  --color-line: rgba(244, 246, 251, 0.1);
+  --color-ink: #080507;
+  --color-panel: #100b0e;
+  --color-bone: #f5f1ee;
+  --color-fog: #a69aa2;
+  --color-blood: #ff2547;
+  --color-ember: #ff8a3d;
+  --color-line: rgba(245, 241, 238, 0.1);
 
   --font-display: var(--font-unbounded), sans-serif;
   --font-sans: var(--font-space-grotesk), sans-serif;
@@ -25,12 +25,12 @@ body {
 }
 
 ::selection {
-  background: var(--color-volt);
+  background: var(--color-blood);
   color: var(--color-ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-aqua);
+  outline: 2px solid var(--color-ember);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -42,18 +42,18 @@ body {
   background: var(--color-ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1d1d29;
+  background: #2a1519;
   border-radius: 8px;
   border: 2px solid var(--color-ink);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2b2b3b;
+  background: #3d1d22;
 }
 
 /* ---- Type treatments ---- */
 
 .text-gradient {
-  background: linear-gradient(95deg, #5b8cff 0%, #46e3ff 58%, #a9e7ff 100%);
+  background: linear-gradient(95deg, #ff2547 0%, #ff8a3d 55%, #ffd2ae 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -61,26 +61,32 @@ body {
 
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(244, 246, 251, 0.32);
+  -webkit-text-stroke: 1.5px rgba(245, 241, 238, 0.32);
 }
 
 .text-outline-faint {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(244, 246, 251, 0.14);
+  -webkit-text-stroke: 1px rgba(245, 241, 238, 0.14);
 }
 
 /* ---- Surfaces ---- */
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(244, 246, 251, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244, 246, 251, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(245, 241, 238, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 241, 238, 0.05) 1px, transparent 1px);
   background-size: 76px 76px;
 }
 
 .mask-fade-edges {
   -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 45%, black 30%, transparent 100%);
   mask-image: radial-gradient(ellipse 70% 70% at 50% 45%, black 30%, transparent 100%);
+}
+
+/* cinematic film grain */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
 /* ---- Motion ---- */
