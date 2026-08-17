@@ -1,26 +1,148 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #050508;
+  --color-panel: #0b0b13;
+  --color-bone: #f4f6fb;
+  --color-fog: #9aa1b8;
+  --color-volt: #5b8cff;
+  --color-aqua: #46e3ff;
+  --color-line: rgba(244, 246, 251, 0.1);
+
+  --font-display: var(--font-unbounded), sans-serif;
+  --font-sans: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-volt);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-aqua);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: #1d1d29;
+  border-radius: 8px;
+  border: 2px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2b2b3b;
+}
+
+/* ---- Type treatments ---- */
+
+.text-gradient {
+  background: linear-gradient(95deg, #5b8cff 0%, #46e3ff 58%, #a9e7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(244, 246, 251, 0.32);
+}
+
+.text-outline-faint {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 246, 251, 0.14);
+}
+
+/* ---- Surfaces ---- */
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(244, 246, 251, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 246, 251, 0.05) 1px, transparent 1px);
+  background-size: 76px 76px;
+}
+
+.mask-fade-edges {
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 45%, black 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 45%, black 30%, transparent 100%);
+}
+
+/* ---- Motion ---- */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2.6s ease-in-out infinite;
+}
+
+@keyframes scroll-line {
+  0% {
+    transform: translateY(-110%);
+  }
+  55% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(110%);
+  }
+}
+.animate-scroll-line {
+  animation: scroll-line 2.1s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-pulse-soft,
+  .animate-scroll-line,
+  .animate-spin-slow {
+    animation: none;
+  }
 }
