@@ -4,9 +4,11 @@ import { useRef } from "react";
 import SplineScene from "./SplineScene";
 
 export default function Hero({
+  introDone,
   onSceneReady,
   onSceneFailed,
 }: {
+  introDone: boolean;
   onSceneReady: () => void;
   onSceneFailed: () => void;
 }) {
