@@ -1,7 +1,15 @@
 "use client";
 
-import { Component, useState, type ReactNode } from "react";
+import {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import dynamic from "next/dynamic";
+import type { Application } from "@splinetool/runtime";
 
 const Spline = dynamic(
   () => import("@splinetool/react-spline").then((m) => m.default),
@@ -68,9 +76,57 @@ export default function SplineScene({
 }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const appRef = useRef<Application | null>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  const handleLoad = useCallback(
+    (app: Application) => {
+      appRef.current = app;
+      setLoaded(true);
+      onReady?.();
+    },
+    [onReady],
+  );
+
+  // The real lag fix: the Spline scene rendered every frame at full
+  // resolution even while the user scrolled the rest of the page, so
+  // every scroll frame fought the GPU. stop() kills the render loop the
+  // moment the hero leaves the viewport (and when the tab is hidden) and
+  // play() resumes it when the hero is back on screen.
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const isOnScreen = () => {
+      const r = wrap.getBoundingClientRect();
+      return r.top < window.innerHeight && r.bottom > 0;
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) appRef.current?.play();
+        else appRef.current?.stop();
+      },
+      { threshold: 0 },
+    );
+    io.observe(wrap);
+
+    const onVisibility = () => {
+      if (document.hidden) appRef.current?.stop();
+      else if (isOnScreen()) appRef.current?.play();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      appRef.current?.stop();
+    };
+  }, []);
 
   return (
     <div
+      ref={wrapRef}
       className="absolute inset-0 overflow-hidden"
       aria-label="Interactive 3D scene"
     >
@@ -84,10 +140,7 @@ export default function SplineScene({
           <Spline
             scene={SCENE_URL}
             className="h-full w-full"
-            onLoad={() => {
-              setLoaded(true);
-              onReady?.();
-            }}
+            onLoad={handleLoad}
           />
         )}
       </SceneBoundary>
