@@ -11,13 +11,15 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
 /**
- * The SCROLL BEYOND scene intro must play in full before the hero content
- * reveals. No interaction skips it — only the timer below (or reduced
- * motion / scene failure) reveals the content.
+ * The SCROLL BEYOND scene intro leads the page: the hero content reveals
+ * shortly after the scene is ready so the 3D animation is seen first but
+ * nobody is ever locked out. Nav is always visible; only the hero content
+ * waits. No interaction skips it — the timer (or reduced motion / scene
+ * failure) reveals the content.
  */
-const INTRO_MS = 4000;
+const INTRO_MS = 2200;
 /** If the scene never signals ready, reveal so the page is never stuck. */
-const SAFETY_MS = 8000;
+const SAFETY_MS = 6000;
 
 export default function Home() {
   const [introDone, setIntroDone] = useState(false);
@@ -67,13 +69,14 @@ export default function Home() {
         Skip to content
       </a>
 
-      {/* cinematic film grain over everything */}
+      {/* cinematic film grain — plain opacity layer (blend modes over the
+          WebGL scene are a scroll-jank killer) */}
       <div
-        className="grain pointer-events-none fixed inset-0 z-30 opacity-[0.05] mix-blend-overlay"
+        className="grain pointer-events-none fixed inset-0 z-30 opacity-[0.045]"
         aria-hidden="true"
       />
 
-      <Nav hidden={!introDone} />
+      <Nav />
       <main id="main">
         <Hero
           introDone={introDone}

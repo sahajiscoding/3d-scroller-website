@@ -135,9 +135,9 @@ export default function Hero({
           className="h-[72vh] w-[46vw] min-w-[420px] max-w-[760px] opacity-[0.16]"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(255,37,71,0.9) 0%, rgba(255,37,71,0.16) 55%, transparent 100%)",
+              "linear-gradient(to bottom, rgba(255,37,71,0.9) 0%, rgba(255,37,71,0.18) 52%, transparent 100%)",
             clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
-            filter: "blur(16px)",
+            filter: "blur(6px)",
           }}
         />
       </div>

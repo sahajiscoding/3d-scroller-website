@@ -70,7 +70,10 @@ export default function SplineScene({
   const [failed, setFailed] = useState(false);
 
   return (
-    <div className="absolute inset-0 overflow-hidden" aria-label="Interactive 3D scene">
+    <div
+      className="absolute inset-0 overflow-hidden"
+      aria-label="Interactive 3D scene"
+    >
       <SceneBoundary
         onError={() => {
           setFailed(true);

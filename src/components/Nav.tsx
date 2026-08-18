@@ -25,7 +25,7 @@ export default function Nav({ hidden = false }: { hidden?: boolean }) {
         hidden ? "pointer-events-none -translate-y-4 opacity-0" : "translate-y-0 opacity-100"
       } ${
         scrolled
-          ? "border-b border-line bg-ink/70 backdrop-blur-xl"
+          ? "border-b border-line bg-ink/95"
           : "border-b border-transparent bg-transparent"
       }`}
     >
