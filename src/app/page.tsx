@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import Headline from "@/components/Headline";
 import TypeScroller from "@/components/TypeScroller";
 import Features from "@/components/Features";
 import Stats from "@/components/Stats";
@@ -83,6 +84,8 @@ export default function Home() {
           onSceneReady={onSceneReady}
           onSceneFailed={reveal}
         />
+        {/* Headline section - appears after scrolling past the Hero */}
+        <Headline />
         <TypeScroller />
         <Features />
         <Stats />
