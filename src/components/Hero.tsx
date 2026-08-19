@@ -1,88 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import SplineScene from "./SplineScene";
-
-type WordDef = {
-  label: string;
-  in: [number, number];
-  out: [number, number];
-};
-
-// the intro sequence, scrubbed by scroll. Each word flips in, holds, then
-// exits — all driven by how far the page has scrolled through the pin.
-const WORDS: WordDef[] = [
-  { label: "GOTHAM", in: [0.0, 0.12], out: [0.3, 0.4] },
-  { label: "TYPE", in: [0.32, 0.44], out: [0.62, 0.72] },
-  { label: "MOVES", in: [0.64, 0.76], out: [0.92, 1.0] },
-];
-
-function ScrubWord({
-  word,
-  index,
-  progress,
-  reduce,
-}: {
-  word: WordDef;
-  index: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-  reduce: boolean;
-}) {
-  const [a, b] = word.in;
-  const [c, d] = word.out;
-  const opacity = useTransform(
-    progress,
-    [a, b, c, d],
-    reduce ? (index === 0 ? [1, 1, 1, 1] : [0, 0, 0, 0]) : [0, 1, 1, 0],
-  );
-  const y = useTransform(
-    progress,
-    [a, b, c, d],
-    reduce ? [0, 0, 0, 0] : [90, 0, 0, -80],
-  );
-  const rotateX = useTransform(
-    progress,
-    [a, b, c, d],
-    reduce ? [0, 0, 0, 0] : [75, 0, 0, -58],
-  );
-  const scale = useTransform(
-    progress,
-    [a, b, c, d],
-    reduce ? [1, 1, 1, 1] : [0.7, 1, 1, 1.08],
-  );
-
-  return (
-    <motion.div
-      style={{
-        opacity,
-        y,
-        rotateX,
-        scale,
-        transformPerspective: 1200,
-        transformStyle: "preserve-3d",
-      }}
-      className="absolute"
-      aria-hidden={index > 0 || reduce}
-    >
-      <span
-        aria-hidden="true"
-        className="text-outline-faint absolute inset-0 block whitespace-nowrap font-display text-[clamp(3.4rem,17vw,13rem)] font-semibold leading-[0.9] tracking-[-0.03em]"
-        style={{ transform: "translateX(12px) translateY(10px)" }}
-      >
-        {word.label}
-      </span>
-      <span className="block whitespace-nowrap font-display text-[clamp(3.4rem,17vw,13rem)] font-semibold leading-[0.9] tracking-[-0.03em] text-paper">
-        {word.label}
-      </span>
-    </motion.div>
-  );
-}
 
 export default function Hero({
   introDone,
@@ -96,80 +16,91 @@ export default function Hero({
   const reduce = useReducedMotion() === true;
   const sectionRef = useRef<HTMLElement>(null);
 
-  // The hero stays pinned for a few viewport-heights. Progress through the
-  // pin (0 → 1) scrubs the whole intro and pulls the camera back.
+  // A short pin (~one screen of extra scroll): the scene stays full-screen
+  // and scrolls the camera back as you pass, then hands straight off to the
+  // content. No text overlay — the 3D animation is the page.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
+  const hintOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.55],
+    reduce ? [1, 1] : [1, 0],
+  );
+
+  const settled = introDone || reduce;
+
   return (
     <section
       id="top"
       ref={sectionRef}
-      className={`relative bg-ink ${reduce ? "h-svh" : "h-[280vh]"}`}
-      aria-label="Scroll-driven 3D type — the intro"
+      className={`relative bg-ink ${reduce ? "h-svh" : "h-[160vh]"}`}
+      aria-label="GOTHAM TYPE — live 3D scroll animation"
     >
-      {/* sticky stage — fills the viewport; scroll scrubs it */}
+      {/* sticky stage — the scene owns the whole page */}
       <div className="sticky top-0 h-svh overflow-hidden">
-        {/* the live 3D scene, zooming out as you scroll */}
+        {/* the live 3D scroller animation, full screen, no text over it */}
         <div className="absolute inset-0 z-0">
           <SplineScene
-            progress={reduce ? undefined : scrollYProgress}
+            progress={scrollYProgress}
             onReady={onSceneReady}
             onFailed={onSceneFailed}
           />
         </div>
 
-        {/* soft legibility washes */}
+        {/* soft legibility washes for the tiny chrome only */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ink/70 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-24 bg-gradient-to-b from-ink/60 to-transparent"
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-40 bg-gradient-to-t from-ink/80 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-28 bg-gradient-to-t from-ink/60 to-transparent"
           aria-hidden="true"
         />
 
-        {/* masthead tag — constant */}
+        {/* small mono tag — the only chrome */}
         <p className="absolute left-5 top-24 z-10 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-paper/80 md:left-10">
           <span aria-hidden="true" className="size-1.5 bg-signal" />
-          Scroll-driven · Vol.01
+          Fig.00 — live · full screen
         </p>
 
-        {/* the words — scroll is the hand that sets them */}
-        <div
-          className="absolute inset-0 z-[2] flex items-center justify-center px-6"
-          aria-label="GOTHAM TYPE moves while you scroll"
-        >
-          {WORDS.map((word, i) => (
-            <ScrubWord
-              key={word.label}
-              word={word}
-              index={i}
-              progress={scrollYProgress}
-              reduce={reduce}
-            />
-          ))}
-        </div>
-
         {/* bottom hint — hands off to the content */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-8 z-[2] flex flex-col items-center gap-4 px-6">
+        <motion.div
+          style={{ opacity: hintOpacity }}
+          className="pointer-events-none absolute inset-x-0 bottom-8 z-10 flex flex-col items-center gap-4 px-6"
+        >
           <p
             className={`text-center font-mono text-[10px] font-bold uppercase leading-relaxed tracking-[0.3em] text-paper/80 transition-opacity duration-700 md:text-[11px] ${
-              introDone || reduce ? "opacity-100" : "opacity-0"
+              settled ? "opacity-100" : "opacity-0"
             }`}
           >
-            {introDone || reduce
-              ? "Keep scrolling — the type is the animation"
-              : "Setting the plate — all motion is scroll-driven"}
+            The scene moves with you — keep scrolling
           </p>
-          <span aria-hidden="true" className="flex items-center gap-2">
-            <span className="relative block h-10 w-px overflow-hidden bg-paper/30">
-              <span className="animate-scroll-line absolute inset-0 bg-paper" />
+          <a
+            href="#masthead"
+            aria-label="Scroll to content"
+            className={`group flex items-center justify-center transition-opacity duration-500 ${
+              settled ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+            }`}
+          >
+            <span className="flex size-12 items-center justify-center border-2 border-paper transition-colors duration-200 group-hover:border-signal group-focus-visible:border-signal">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="square"
+                className="size-5 text-paper transition-colors duration-200 group-hover:text-signal"
+                aria-hidden="true"
+              >
+                <path d="M12 4v16" />
+                <path d="M19 13l-7 7-7-7" />
+              </svg>
             </span>
-          </span>
-        </div>
+          </a>
+        </motion.div>
       </div>
     </section>
   );
