@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Unbounded, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Fraunces, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const unbounded = Unbounded({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-unbounded",
+  variable: "--font-fraunces",
   display: "swap",
 });
 
@@ -14,25 +14,47 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-const jetBrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains",
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#f3ede0",
+};
+
 export const metadata: Metadata = {
-  title: "GOTHAM TYPE® — 3D Type Scroller Experiences",
+  metadataBase: new URL("https://gothamtype.studio"),
+  title: "GOTHAM TYPE® — scroll-driven 3D type",
   description:
-    "Scroll-driven 3D type experiences built with Spline. Cinematic headlines that own the night — engineered to make people stop scrolling.",
+    "A small studio that sets words in 3D and makes them move while you scroll. Big headlines, one idea per page, no templates.",
+  applicationName: "GOTHAM TYPE®",
+  creator: "GOTHAM TYPE Studio",
+  openGraph: {
+    title: "GOTHAM TYPE® — scroll-driven 3D type",
+    description:
+      "We build 3D type that tilts, dives and stacks as you scroll. One idea per page, set really big.",
+    type: "website",
+    locale: "en_US",
+    siteName: "GOTHAM TYPE®",
+  },
+  twitter: {
+    card: "summary",
+    creator: "@gothamtype",
+    title: "GOTHAM TYPE® — scroll-driven 3D type",
+    description: "3D type that moves while you scroll. No templates.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${unbounded.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${spaceGrotesk.variable} ${spaceMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-ink font-sans text-bone">
+      <body className="min-h-full bg-paper font-sans text-ink">
         {children}
       </body>
     </html>

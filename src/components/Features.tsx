@@ -1,30 +1,33 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "./Buttons";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const ROWS = [
   {
     n: "01",
-    title: "Type that strikes at night",
-    desc: "Headline-sized words choreographed to your scroll — tilt, depth, stagger and easing tuned frame by frame.",
+    title: "Scroll choreography",
+    desc: "What arrives first, what waits, what lands last. We map your message onto the scroll like a storyboard — the page earns the reader's time.",
+    spec: "STORYBOARD FIRST",
   },
   {
     n: "02",
-    title: "Gotham-grade Spline 3D",
-    desc: "Live 3D scenes embedded at 60fps. Orbit, zoom and relight the model without ever leaving the page.",
+    title: "3D set design",
+    desc: "Real 3D scenes, embedded live on the page. Drag, orbit, zoom. No prerendered stills pretending to be motion.",
+    spec: "SPLINE · 60 FPS",
   },
   {
     n: "03",
-    title: "Choreographed darkness",
-    desc: "Every section is scored like a film. Enter, hold and exit beats that keep people watching to the end.",
+    title: "Motion grading",
+    desc: "Entrances, holds and exits are timed like cuts in a film. Calm in, impact out. Nothing fades in and floats mid-air.",
+    spec: "EASE [0.16,1,0.3,1]",
   },
   {
     n: "04",
-    title: "Nocturnal performance",
-    desc: "Lazy-loaded 3D, GPU-friendly transforms and a hard budget of zero jank — even in the dark of phones.",
+    title: "Performance lockdown",
+    desc: "Lazy-loaded scenes, GPU-friendly transforms, and a bug list that treats 30 frames a second as a defect.",
+    spec: "HARD BUDGET · 0 JANK",
   },
 ];
 
@@ -33,61 +36,48 @@ export default function Features() {
 
   return (
     <section
-      id="work"
-      className="relative border-t border-line bg-panel py-20 md:py-28"
-      aria-label="What we build"
+      id="process"
+      className="relative border-t border-ink bg-sand"
+      aria-label="How we work"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 md:px-10">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: EASE }}
-          className="mb-14 flex flex-col gap-6 md:mb-20 md:flex-row md:items-end md:justify-between"
-        >
-          <div>
-            <p className="mb-4 font-mono text-[11px] tracking-[0.35em] text-blood">
-              02 / WHAT WE BUILD
-            </p>
-            <h2 className="font-display text-4xl font-bold leading-[1.02] tracking-tight text-bone md:text-6xl">
-              Night work,
-              <br />
-              <span className="text-gradient">done right.</span>
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:px-10 md:py-32">
+        <div className="mb-16 grid grid-cols-1 gap-6 md:mb-20 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-7">
+            <p className="kicker mb-6">04 / How we work</p>
+            <h2 className="font-display text-4xl font-semibold leading-[0.98] tracking-[-0.03em] text-ink md:text-6xl">
+              We treat your first scroll like a{" "}
+              <em className="italic text-signal">first take.</em>
             </h2>
           </div>
-          <p className="max-w-sm text-base leading-relaxed text-fog">
-            Four disciplines, one obsession: type that owns the night.
+          <p className="max-w-sm text-base leading-relaxed text-fog md:col-span-4 md:col-start-9">
+            Four disciplines. One obsession: words that move on purpose.
           </p>
-        </motion.div>
+        </div>
 
         <ul>
           {ROWS.map((row, i) => (
             <motion.li
               key={row.n}
-              initial={reduce ? false : { opacity: 0, y: 32 }}
+              initial={reduce ? false : { opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, delay: i * 0.06, ease: EASE }}
-              className="group relative border-t border-line last:border-b"
+              transition={{ duration: 0.7, delay: i * 0.05, ease: EASE }}
+              className="group border-t border-ink last:border-b"
             >
-              <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blood/[0.09] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <a
-                href="#contact"
-                className="relative grid cursor-pointer grid-cols-12 items-baseline gap-4 px-2 py-10 md:items-center md:gap-6 md:px-4 md:py-14"
-              >
-                <span className="col-span-2 font-mono text-xs tracking-[0.3em] text-fog/70 md:col-span-1">
+              <div className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2 px-1 py-8 transition-colors duration-200 group-hover:bg-paper md:items-center md:px-4 md:py-10">
+                <span className="col-span-2 font-mono text-xs font-bold tracking-[0.25em] text-signal md:col-span-1">
                   {row.n}
                 </span>
-                <h3 className="col-span-10 font-display text-2xl font-bold tracking-tight text-bone transition-transform duration-300 group-hover:translate-x-2 md:col-span-5 md:text-4xl">
+                <h3 className="col-span-10 font-display text-2xl font-medium tracking-[-0.02em] text-ink md:col-span-4 md:text-3xl">
                   {row.title}
                 </h3>
-                <p className="col-span-10 col-start-3 text-sm leading-relaxed text-fog md:col-span-5 md:col-start-7 md:text-base">
+                <p className="col-span-10 col-start-3 mt-1 text-sm leading-relaxed text-fog md:col-span-5 md:col-start-6 md:mt-0 md:text-[15px]">
                   {row.desc}
                 </p>
-                <span className="col-span-1 hidden justify-self-end text-fog transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-blood md:flex">
-                  <ArrowUpRight className="size-6" />
+                <span className="col-span-10 col-start-3 mt-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-fog md:col-span-2 md:col-start-11 md:mt-0 md:justify-self-end md:text-[10px]">
+                  {row.spec}
                 </span>
-              </a>
+              </div>
             </motion.li>
           ))}
         </ul>

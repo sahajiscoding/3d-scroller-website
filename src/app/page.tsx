@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import Headline from "@/components/Headline";
+import Masthead from "@/components/Masthead";
+import Manifesto from "@/components/Manifesto";
 import TypeScroller from "@/components/TypeScroller";
 import Features from "@/components/Features";
 import Stats from "@/components/Stats";
@@ -62,18 +63,17 @@ export default function Home() {
   }, [reduce, reveal]);
 
   return (
-    <div className="relative bg-ink text-bone">
+    <div className="relative bg-paper text-ink">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-bone focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-ink"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-none focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-paper"
       >
         Skip to content
       </a>
 
-      {/* cinematic film grain — plain opacity layer (blend modes over the
-          WebGL scene are a scroll-jank killer) */}
+      {/* faint paper grain — print, not cinema */}
       <div
-        className="grain pointer-events-none fixed inset-0 z-30 opacity-[0.045]"
+        className="grain pointer-events-none fixed inset-0 z-30 opacity-[0.04]"
         aria-hidden="true"
       />
 
@@ -84,8 +84,9 @@ export default function Home() {
           onSceneReady={onSceneReady}
           onSceneFailed={reveal}
         />
-        {/* Headline section - appears after scrolling past the Hero */}
-        <Headline />
+        {/* the animation filled the page first — now the content begins */}
+        <Masthead />
+        <Manifesto />
         <TypeScroller />
         <Features />
         <Stats />

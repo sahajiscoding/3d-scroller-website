@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import dynamic from "next/dynamic";
+import { useReducedMotion, type MotionValue } from "framer-motion";
 import type { Application } from "@splinetool/runtime";
 
 const Spline = dynamic(
@@ -40,15 +41,17 @@ class SceneBoundary extends Component<
 function LoadingSkeleton({ visible }: { visible: boolean }) {
   return (
     <div
-      className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 bg-ink transition-opacity duration-700 ${
+      className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-ink transition-opacity duration-700 ${
         visible ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
       aria-hidden={!visible}
     >
-      <div className="bg-grid mask-fade-edges absolute inset-0" />
-      <div className="animate-pulse-soft relative h-40 w-40 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ff8a3d_0%,#ff2547_45%,rgba(8,5,7,0)_72%)] blur-[2px]" />
-      <p className="relative font-mono text-[11px] tracking-[0.35em] text-fog">
-        LOADING SCENE
+      <div className="animate-pulse-soft relative h-24 w-24 border-2 border-paper/40" />
+      <p className="font-mono text-[10px] font-bold tracking-[0.32em] text-paper/70">
+        LOADING PLATE
+      </p>
+      <p className="font-mono text-[10px] tracking-[0.32em] text-paper/40">
+        GOTHAM TYPE®
       </p>
     </div>
   );
@@ -56,13 +59,20 @@ function LoadingSkeleton({ visible }: { visible: boolean }) {
 
 function FallbackScene() {
   return (
-    <div className="absolute inset-0 z-10 overflow-hidden bg-ink" aria-hidden="true">
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-ink" aria-hidden="true">
       <div className="bg-grid mask-fade-edges absolute inset-0" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="animate-pulse-soft h-72 w-72 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ff8a3d_0%,#ff2547_50%,rgba(8,5,7,0)_74%)] blur-[6px]" />
-        <div className="animate-spin-slow absolute inset-[-3rem] rounded-full border border-dashed border-blood/30" />
-        <div className="absolute inset-[1.5rem] rounded-full border border-ember/20" />
+      <div className="relative flex items-center justify-center border border-paper/30 px-8 py-10">
+        <span className="absolute -left-2 -top-2 size-3 border-l-2 border-t-2 border-paper/60" />
+        <span className="absolute -right-2 -top-2 size-3 border-r-2 border-t-2 border-paper/60" />
+        <span className="absolute -bottom-2 -left-2 size-3 border-b-2 border-l-2 border-paper/60" />
+        <span className="absolute -bottom-2 -right-2 size-3 border-b-2 border-r-2 border-paper/60" />
+        <p className="font-display text-3xl font-semibold italic text-paper">
+          the type didn&apos;t show.
+        </p>
       </div>
+      <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-paper/60">
+        plate failed — reload to retry
+      </p>
     </div>
   );
 }
@@ -70,14 +80,18 @@ function FallbackScene() {
 export default function SplineScene({
   onReady,
   onFailed,
+  progress,
 }: {
   onReady?: () => void;
   onFailed?: () => void;
+  /** Scroll progress (0 → 1) scrubbing the scene, from the pinned hero. */
+  progress?: MotionValue<number>;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
   const appRef = useRef<Application | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion() === true;
 
   const handleLoad = useCallback(
     (app: Application) => {
@@ -88,11 +102,36 @@ export default function SplineScene({
     [onReady],
   );
 
-  // The real lag fix: the Spline scene rendered every frame at full
-  // resolution even while the user scrolled the rest of the page, so
-  // every scroll frame fought the GPU. stop() kills the render loop the
-  // moment the hero leaves the viewport (and when the tab is hidden) and
-  // play() resumes it when the hero is back on screen.
+  // Scroll drives the animation: let the page scroll even over the canvas
+  // (the canvas otherwise swallows wheel + touch for its own orbit/zoom).
+  // We set `pan-y` so vertical swipes scroll too. Drag-orbit stays.
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const canvas = wrap.querySelector("canvas");
+    if (canvas) canvas.style.touchAction = "pan-y";
+  }, [loaded]);
+
+  // Scrib the scene with scroll progress: camera pulls back as the words
+  // roll in (guaranteed visible 3D motion) and we forward `scrollProgress`
+  // in case the scene is set up to animate on it.
+  useEffect(() => {
+    const app = appRef.current;
+    if (!app || !progress) return;
+
+    const apply = (v: number) => {
+      const p = Math.min(1, Math.max(0, v));
+      if (!reduce) app.setZoom(1.32 - p * 0.42);
+      app.emitEvent?.("scrollProgress" as never, p as never);
+    };
+    const unsubscribe = progress.on("change", apply);
+    apply(progress.get());
+    return unsubscribe;
+  }, [loaded, progress, reduce]);
+
+  // Stop the Spline render loop the moment the scene leaves the viewport
+  // (and when the tab is hidden); resume when it's back on screen.
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;

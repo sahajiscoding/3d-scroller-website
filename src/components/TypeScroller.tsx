@@ -10,21 +10,21 @@ import {
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-type Tone = "solid" | "outline" | "gradient";
+type Tone = "solid" | "outline" | "signal";
 type Align = "justify-start" | "justify-center" | "justify-end";
 
 const WORDS: { word: string; tone: Tone; align: Align; index: string }[] = [
-  { word: "GOTHAM", tone: "solid", align: "justify-start", index: "01" },
-  { word: "SCROLL", tone: "outline", align: "justify-end", index: "02" },
-  { word: "BEYOND", tone: "gradient", align: "justify-center", index: "03" },
-  { word: "SHADOW", tone: "solid", align: "justify-start", index: "04" },
-  { word: "DARK", tone: "outline", align: "justify-end", index: "05" },
+  { word: "SET", tone: "solid", align: "justify-start", index: "01" },
+  { word: "BIG", tone: "outline", align: "justify-end", index: "02" },
+  { word: "MOVE", tone: "signal", align: "justify-center", index: "03" },
+  { word: "SCROLL", tone: "solid", align: "justify-start", index: "04" },
+  { word: "TYPE", tone: "outline", align: "justify-end", index: "05" },
 ];
 
 const toneClass: Record<Tone, string> = {
-  solid: "text-bone",
+  solid: "text-ink",
   outline: "text-outline",
-  gradient: "text-gradient",
+  signal: "text-signal",
 };
 
 function WordRow({
@@ -81,10 +81,9 @@ function WordRow({
       ref={ref}
       className="relative flex h-[52vh] items-center justify-center"
     >
-      {/* index marker */}
       <motion.span
         style={{ opacity }}
-        className="absolute left-6 top-10 font-mono text-[11px] tracking-[0.3em] text-fog/80 md:left-12"
+        className="absolute left-6 top-10 font-mono text-[11px] font-bold tracking-[0.3em] text-fog md:left-12"
         aria-hidden="true"
       >
         {index}
@@ -102,10 +101,9 @@ function WordRow({
           }}
           className="px-4 md:px-12"
         >
-          {/* depth copy */}
           <span
             aria-hidden="true"
-            className={`text-outline-faint absolute inset-0 block whitespace-nowrap font-display text-[clamp(3.4rem,15vw,12rem)] font-extrabold leading-[0.9] tracking-[-0.02em]`}
+            className="text-outline-faint absolute inset-0 block whitespace-nowrap font-display text-[clamp(3.4rem,15vw,12rem)] font-semibold leading-[0.9] tracking-[-0.02em]"
             style={{ transform: "translateZ(-130px)", opacity: 0.7 }}
           >
             {word}
@@ -117,10 +115,10 @@ function WordRow({
               initial={reduce ? false : "hidden"}
               whileInView="visible"
               viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
-              className={`block whitespace-nowrap font-display text-[clamp(3.4rem,15vw,12rem)] font-extrabold leading-[0.9] tracking-[-0.02em] ${toneClass[tone]}`}
+              className={`block whitespace-nowrap font-display text-[clamp(3.4rem,15vw,12rem)] font-semibold leading-[0.9] tracking-[-0.02em] ${toneClass[tone]}`}
               aria-label={word}
             >
-              {tone === "gradient"
+              {tone === "signal"
                 ? word
                 : word.split("").map((ch, i) => (
                     <motion.span
@@ -150,61 +148,55 @@ export default function TypeScroller() {
 
   return (
     <section
-      id="studio"
+      id="work"
       ref={sectionRef}
-      className="relative bg-ink pt-20 pb-36 md:pt-28 md:pb-44"
-      aria-label="The type scroller"
+      className="relative bg-paper pt-20 pb-36 md:pt-28 md:pb-44"
+      aria-label="The scroller — our signature piece"
     >
-      {/* red ambient glow behind the cascade */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[70vh] w-[85vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(255,37,71,0.07)_0%,transparent_65%)]"
-        aria-hidden="true"
-      />
+      {/* section header */}
+      <div className="mx-auto w-full max-w-[1440px] px-6 md:px-10">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-7">
+            <p className="kicker mb-6">03 / The scroller</p>
+            <h2 className="font-display text-4xl font-semibold leading-[0.98] tracking-[-0.03em] text-ink md:text-6xl">
+              Five words.
+              <br />
+              <em className="italic text-signal">One scroll.</em>
+            </h2>
+          </div>
+          <p className="max-w-sm text-base leading-relaxed text-fog md:col-span-4 md:col-start-9">
+            Each word is a scene. Tilt, depth, stagger and easing are tuned
+            frame by frame to the scroll — not dropped in and left alone.
+          </p>
+        </div>
+      </div>
 
-      {/* the animation comes first: the word cascade */}
-      <div className="relative">
+      {/* the words */}
+      <div className="relative mt-10">
         {WORDS.map((w) => (
           <WordRow key={w.index} {...w} reduce={reduce} />
         ))}
       </div>
 
-      {/* content follows the animation */}
-      <div className="mx-auto mt-32 flex w-full max-w-[1440px] flex-col gap-6 px-6 md:mt-40 md:flex-row md:items-end md:justify-between md:px-10">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          <p className="mb-4 font-mono text-[11px] tracking-[0.35em] text-blood">
-            01 / THE SCROLLER
+      {/* margin tip, framed like a printer's note */}
+      <div className="mx-auto w-full max-w-[1440px] px-6 md:px-10">
+        <div className="relative ml-0 max-w-md border border-ink px-5 py-4 md:ml-[12.5%]">
+          <span className="absolute -left-2.5 -top-2.5 size-2.5 bg-signal" />
+          <p className="font-mono text-[11px] font-bold uppercase leading-relaxed tracking-[0.18em] text-fog">
+            Marg. note — scroll this plate slowly. The words unfold like a
+            filmstrip, one axis at a time.
           </p>
-          <h2 className="font-display text-4xl font-bold leading-[1.02] tracking-tight text-bone md:text-6xl">
-            Words you can
-            <br />
-            <span className="text-gradient">feel moving.</span>
-          </h2>
-        </motion.div>
-        <motion.p
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
-          className="max-w-sm text-base leading-relaxed text-fog"
-        >
-          Five words, choreographed to your scroll — each one tilting,
-          scaling and drifting through space, frame by frame.
-        </motion.p>
+        </div>
       </div>
 
       {/* progress rail */}
       <div
-        className="fixed right-8 top-1/2 z-40 hidden h-64 w-px -translate-y-1/2 bg-line lg:block"
+        className="fixed right-6 top-1/2 z-40 hidden h-56 w-0.5 -translate-y-1/2 bg-line lg:block"
         aria-hidden="true"
       >
         <motion.div
           style={{ scaleY: scrollYProgress }}
-          className="h-full w-full origin-top bg-gradient-to-b from-blood to-ember"
+          className="h-full w-full origin-top bg-signal"
         />
       </div>
     </section>

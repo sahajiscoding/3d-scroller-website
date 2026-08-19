@@ -4,7 +4,7 @@ type Variant = "primary" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "group inline-flex cursor-pointer select-none items-center justify-center gap-3 rounded-full font-semibold tracking-tight transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember";
+  "group inline-flex cursor-pointer select-none items-center justify-center gap-3 rounded-none font-semibold tracking-tight transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal active:translate-x-0.5 active:translate-y-0.5";
 
 const sizes: Record<Size, string> = {
   sm: "h-11 px-5 text-sm",
@@ -14,9 +14,9 @@ const sizes: Record<Size, string> = {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-r from-blood to-ember text-ink shadow-[0_10px_44px_-10px_rgba(255,37,71,0.6)] hover:shadow-[0_14px_60px_-10px_rgba(255,138,61,0.7)] hover:brightness-110 active:scale-[0.98]",
+    "border border-ink bg-ink text-paper shadow-[4px_4px_0_0_var(--color-signal)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--color-signal)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
   ghost:
-    "border border-line bg-white/[0.03] text-bone backdrop-blur-sm hover:border-blood/70 hover:bg-blood/10 hover:text-ember active:scale-[0.98]",
+    "border border-ink bg-paper text-ink hover:bg-ink hover:text-paper",
 };
 
 export function Button({
@@ -56,21 +56,13 @@ export function ArrowUpRight({ className = "size-5" }: { className?: string }) {
       fill="none"
       stroke="currentColor"
       strokeWidth={2.4}
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      strokeLinecap="square"
+      strokeLinejoin="miter"
       className={`${className} transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5`}
       aria-hidden="true"
     >
       <path d="M7 17 17 7" />
       <path d="M8 7h9v9" />
-    </svg>
-  );
-}
-
-export function PlayIcon({ className = "size-4 fill-current" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path d="M8.4 5.45a1 1 0 0 1 1.53-.85l10.1 6.55a1 1 0 0 1 0 1.7L9.93 19.4a1 1 0 0 1-1.53-.85V5.45Z" />
     </svg>
   );
 }
