@@ -18,7 +18,8 @@ export default function Masthead() {
 
   return (
     <section
-      className="relative border-t border-ink bg-paper"
+      id="masthead"
+      className="relative scroll-mt-20 border-t border-ink bg-paper"
       aria-label="GOTHAM TYPE — scroll-driven 3D type"
     >
       <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:px-10 md:py-36">
